@@ -6,7 +6,7 @@ Todo built on  ASP.NET Razopages
 ## Screenshots
 
 ### Home
-![Register](Screenshots/01-Home.png)
+![Register](ToDoListRazorPages/Screenshots/01-Home.png)
 
 ### Login
 ![Home Page](Screenshot/Login.png)
