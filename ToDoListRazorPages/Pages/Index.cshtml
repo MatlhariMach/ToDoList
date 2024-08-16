@@ -1,0 +1,195 @@
+﻿@page
+@model ToDoListRazorPages.Pages.IndexModel
+@using ToDoListRazorPages.Models
+@{
+    ViewData["Title"] = "My Todo-s";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><span class="icon">&#9745;</span> My Todo-s</h1>
+        </header>
+
+        <!-- New Task Form -->
+        <form method="post">
+            <div class="new-task">
+                <input asp-for="IndexViewModel.NewToDoItem.Description" class="form-control description-input" placeholder="Add new..." />
+                <input asp-for="IndexViewModel.NewToDoItem.DueDate" class="form-control calendar-btn" type="date" />
+                <input type="submit" value="Create" class="btn btn-primary create-btn" />
+            </div>
+        </form>
+        <h3>Filter and Sort Options</h3>
+      <!-- <a asp-page="./Index" asp-route-Filter="all" asp-route-Sort="added-date">All</a> |
+        <a asp-page="./Index" asp-route-Filter="completed" asp-route-Sort="added-date">Completed</a> |
+        <a asp-page="./Index" asp-route-Filter="pending" asp-route-Sort="due-date">Pending</a>-->
+
+        <!-- Filters and Sorting Form -->
+        <form method="get">
+            <div class="filters">
+                <div>
+                    <label for="filter">Filter</label>
+                    <select id="filter" name="filter" onchange="this.form.submit()">
+                        <option value="all" selected="@Model.Filter == "all"" >All</option>
+                        <option value="completed" selected="@Model.Filter == "completed"" >Completed</option>
+                        <option value="pending" selected="@Model.Filter == "pending"" >Pending</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sort">Sort</label>
+                    <select id="sort" name="sort" onchange="this.form.submit()">
+                        <option value="added-date" selected="@Model.Sort == "added-date"" >Added Date</option>
+                        <option value="due-date" selected="@Model.Sort == "due-date"" >Due Date</option>
+                    </select>
+                    <button class="sort-btn" type="submit">&#x2195;</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Todo List Display -->
+        <ul class="todo-list">
+            @foreach (var item in Model.IndexViewModel.ToDoItems)
+            {
+                <li class="@(item.IsCompleted ? "completed-task" : "")">
+                    <!-- Form for toggling completion -->
+                    <form method="post" asp-page-handler="ToggleCompletion">
+                        <input type="checkbox" name="IsCompleted" @(item.IsCompleted ? "checked" : "") onchange="this.form.submit();" />
+                        <input type="hidden" name="Id" value="@item.Id" />
+                    </form>
+
+                    <!-- Description with conditional class for styling -->
+                    <span class="task-text">@Html.DisplayFor(modelItem => item.Description)</span>
+
+                    <span class="date-info">&#8505; @Html.DisplayFor(modelItem => item.DueDate)</span>
+                    <span>
+                        <!-- Trigger Edit Modal -->
+                        <button type="button" class="edit-btn btn btn-warning" data-toggle="modal" data-target="#editModal-@item.Id">
+                            &#9998; Edit
+                        </button>
+                        <!-- Trigger Delete Modal -->
+                        <button type="button" class="delete-btn btn btn-danger" data-toggle="modal" data-target="#deleteModal-@item.Id">
+                            &#128465; Delete
+                        </button>
+                        <!-- Trigger View Modal -->
+                        <button type="button" class="view-btn btn btn-info" data-toggle="modal" data-target="#viewModal-@item.Id">
+                            &#128065; View
+                        </button>
+                    </span>
+                </li>
+
+                <!-- View Modal -->
+                <div class="modal fade" id="viewModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewModalLabel">View Todo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- View Details -->
+                                <div class="form-group">
+                                    <label>Description:</label>
+                                    <p>@item.Description</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Due Date:</label>
+                                    <p>@item.DueDate?.ToString("yyyy-MM-dd")</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Completed:</label>
+                                    <p>@(item.IsCompleted ? "Yes" : "No")</p>
+                                </div>
+                                @if (item.CompletedDate.HasValue)
+                                {
+                                    <div class="form-group">
+                                        <label>Completed Date:</label>
+                                        <p>@item.CompletedDate?.ToString("yyyy-MM-dd")</p>
+                                    </div>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Modal -->
+                <div class="modal fade" id="editModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Edit Todo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Edit Form -->
+                                <form method="post" asp-page-handler="Edit">
+                                    <input type="hidden" name="Id" value="@item.Id" />
+                                    <div class="form-group">
+                                        <label asp-for="@item.Description"></label>
+                                        <input name="Description" value="@item.Description" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="@item.DueDate"></label>
+                                        <input name="DueDate" value="@item.DueDate?.ToString("yyyy-MM-dd")" class="form-control" type="date" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <input type="submit" class="btn btn-primary" value="Save changes" />
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Delete Todo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this task?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <form method="post" asp-page-handler="Delete">
+                                    <input type="hidden" name="Id" value="@item.Id" />
+                                    <input type="submit" class="btn btn-danger" value="Delete" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
