@@ -6,47 +6,34 @@ Todo built on  ASP.NET Razopages
 ## Screenshots
 
 ### Home
-![Register](ToDoListRazorPages/Screenshots/01-Home.png)
+![Index](ToDoListRazorPages/Screenshots/01-Home.png)
 
-### Login
-![Home Page](Screenshot/Login.png)
+### Create
+![Home Page](ToDoListRazorPages/Screenshots/02-create.png)
 
-### Home full
-![Home Page](Screenshot/Home%20full.png)
+### Home created
+![Home Page](ToDoListRazorPages/Screenshots/02-create.png)
 
 ### Home Page
-![Home Page](Screenshot/Home.png)
+![Home Page](ToDoListRazorPages/Screenshots/03-create.png)
 
-### Fistpost
-![CFistpost](Screenshot/Fistpost.png)
+### Home Full
+![Home](ToDoListRazorPages/Screenshots/04-Home.png)
 
-### Post2
-![Post2](Screenshot/Post2.png)
+### Edit
+![Post2](ToDoListRazorPages/Screenshots/05-Edit.png)
 
-### Post with edit delete
-![Post with edit delete](Screenshot/Post%20with%20edit%20delete.png)
+### Edit
+![Edit](ToDoListRazorPages/Screenshots/06-Edit.png)
+
+### View
+![View](ToDoListRazorPages/Screenshots/07-view.png)
+
+###  View
+![View](ToDoListRazorPages/Screenshots/08-view.png)
 
 ### Delete
-![Delete](Screenshot/Delete.png)
+![Comment](ToDoListRazorPages/Screenshots/09-Delete.pngg)
 
-###  Edit
-![Admin Summary](Screenshot/Edit.png)
-
-### Comment
-![Comment](Screenshot/Comment.png)
-
-### Comment
-![Comment](Screenshot/comment%20edit%20delete.png)
-
-### comment edit delete
-![comment edit delete](Screenshot/comment%20edit%20delete.png)
-
-### Edit comment
-![Edit comment](Screenshot/Edit%20comment.png)
-
-### Edit comment
-![Edit comment](Screenshot/Edit%20comment%202.png)
-
-### Create Create
-![Create](Screenshot/CreatePost.png)
-
+### Delete
+![Comment](ToDoListRazorPages/Screenshots/10-Delete.png)
